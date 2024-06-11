@@ -9,10 +9,10 @@ create table user
     user_id  int unsigned not null primary key auto_increment,
     username varchar(50)  not null comment '用户名',
     password varchar(50)  not null comment '密码',
-    phone    char(11)     null comment '电话号码（11位）',
-    email    varchar(30)  null comment '电子邮箱',
-    job      varchar(20)  null comment '工作性质',
-    company  varchar(30)  null default null comment '工作地点'
+    phone    char(11) comment '电话号码（11位）',
+    email    varchar(30) comment '电子邮箱',
+    job      varchar(20) comment '工作性质',
+    company  varchar(30) comment '工作地点'
 ) comment '用户表' character set = utf8mb4
                    collate = utf8mb4_0900_ai_ci;
 
@@ -46,12 +46,12 @@ create table post
     post_id     int unsigned not null primary key auto_increment,
     user_id     int unsigned not null comment '发帖用户ID',
     category_id int unsigned not null comment '帖子板块ID',
-    is_pinned   tinyint      null default 0 comment '0表示不置顶，1表示置顶',
-    is_featured tinyint      null default 0 comment '0表示非精选，1表示精选',
+    is_pinned   tinyint       default 0 comment '0表示不置顶，1表示置顶',
+    is_featured tinyint      default 0 comment '0表示非精选，1表示精选',
     title       varchar(50)  not null comment '标题',
     content     longtext     not null comment '内容',
     create_time datetime     not null comment '发表时间',
-    update_time datetime     null default null comment '更新时间',
+    update_time datetime     comment '更新时间',
     foreign key (user_id) references user (user_id),
     foreign key (category_id) references category (category_id)
 ) comment '帖子表' character set = utf8mb4
@@ -76,7 +76,7 @@ create table comment
     comment_id  int unsigned not null primary key auto_increment,
     user_id     int unsigned not null comment '评论用户ID',
     post_id     int unsigned not null comment '评论的帖子id',
-    parent_id   int          null default null comment '父评论id（null为直接对帖子评论）',
+    parent_id   int        comment '父评论id（null为直接对帖子评论）',
     content     text         not null comment '评论内容',
     create_time datetime     not null comment '评论时间',
     foreign key (user_id) references user (user_id),

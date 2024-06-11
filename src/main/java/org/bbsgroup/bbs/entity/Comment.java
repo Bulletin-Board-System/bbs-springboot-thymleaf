@@ -1,8 +1,7 @@
 package org.bbsgroup.bbs.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import org.apache.ibatis.annotations.Mapper;
+
 import java.time.LocalDateTime;
 
 /**
@@ -13,11 +12,8 @@ import java.time.LocalDateTime;
  * @author https://github.com/lukrisum
  * @since 2024-06-11
  */
-public class Comment implements Serializable {
+public class Comment{
 
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "comment_id", type = IdType.AUTO)
     private Integer commentId;
 
     /**

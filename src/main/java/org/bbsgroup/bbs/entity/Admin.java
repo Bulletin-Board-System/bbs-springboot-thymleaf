@@ -1,7 +1,7 @@
 package org.bbsgroup.bbs.entity;
 
+
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 /**
@@ -12,11 +12,7 @@ import java.io.Serializable;
  * @author https://github.com/lukrisum
  * @since 2024-06-11
  */
-public class Admin implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "user_id", type = IdType.AUTO)
+public class Admin{
     private Integer userId;
 
     /**
