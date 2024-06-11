@@ -28,7 +28,7 @@ public class MybatisPlusAutoGeneratorUtil {
                 //策略配置
                 .strategyConfig(builder -> builder
                                 // 设置需要生成的表名
-                                .addInclude("user", "category", "comment", "post", "user")
+                                .addInclude("user", "category", "comment", "post", "admin")
                                 //配置模型
                                 .entityBuilder().enableFileOverride()
 //                        //配置控制器
