@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.bbsgroup.bbs.entity.User;
 
+import java.util.List;
+
 @Mapper
 public interface UserDao {
     @Insert("insert into bbs.user (user_id, username, password, phone, email, job, company) values (#{userId}, #{username}, #{password}, #{phone}, #{email}, #{job}, #{company})")
@@ -14,7 +16,17 @@ public interface UserDao {
     User selectByUsername(String username);
 
     @Select("select * from bbs.user where username = #{username} and password = #{password}")
-    User selectUserByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
+    User selectUserByUsernameAndPassword(String username, String password);
+
+    @Select({
+            "<script>",
+            "select * from bbs.user where user_id in",
+            "<foreach item='userId' collection='userIds' open='(' separator=',' close=')'>",
+            "#{userId}",
+            "</foreach>",
+            "</script>"
+    })
+    List<User> selectAllByUserIds(List<Integer> userIds);
 
     //    暂不支持更新 password
     @Update("update bbs.user set username = #{username}, email = #{email}, phone = #{phone}, job = #{job}, company = #{company} where user_id = #{userId}")

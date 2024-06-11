@@ -1,20 +1,9 @@
 package org.bbsgroup.bbs.entity;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- * <p>
- * 帖子表
- * </p>
- *
- * @author https://github.com/lukrisum
- * @since 2024-06-11
- */
-public class Post {
-
+public class PostPlus {
     private static final long serialVersionUID = 1L;
 
     private Integer postId;
@@ -58,6 +47,21 @@ public class Post {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 作者用户名
+     */
+    private String username;
+
+    /**
+     * 评论数量
+     */
+    private Integer commentCnt;
+
+    /**
+     * 所在分区
+     */
+    private String category;
 
     public Integer getPostId() {
         return postId;
@@ -131,18 +135,45 @@ public class Post {
         this.updateTime = updateTime;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Integer getCommentCnt() {
+        return commentCnt;
+    }
+
+    public void setCommentCnt(Integer commentCnt) {
+        this.commentCnt = commentCnt;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return "Post{" +
-        "postId = " + postId +
-        ", userId = " + userId +
-        ", categoryId = " + categoryId +
-        ", isPinned = " + isPinned +
-        ", isFeatured = " + isFeatured +
-        ", title = " + title +
-        ", content = " + content +
-        ", createTime = " + createTime +
-        ", updateTime = " + updateTime +
-        "}";
+        return "PostPlus{" +
+                "postId=" + postId +
+                ", userId=" + userId +
+                ", categoryId=" + categoryId +
+                ", isPinned=" + isPinned +
+                ", isFeatured=" + isFeatured +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", username='" + username + '\'' +
+                ", commentCnt=" + commentCnt +
+                ", category='" + category + '\'' +
+                '}';
     }
 }

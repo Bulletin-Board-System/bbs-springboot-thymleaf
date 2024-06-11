@@ -10,21 +10,25 @@ import java.util.List;
 @Mapper
 public interface PostDao {
     //  获取（分区）帖子总数
-    @Select("<script>" +
-            "select count(*) from bbs.post" +
-            "<if test='categoryId!=null and categoryId!=\"\"'>" +
-            "where category_id = #{categoryId}" +
-            "</if>" +
-            "</script>")
+    @Select({
+            "<script>",
+            "select count(*) from bbs.post",
+            "<if test='categoryId!=null and categoryId!=\"\"'>",
+            "where category_id = #{categoryId}",
+            "</if>",
+            "</script>"
+    })
     Integer getCountByCategoryId(PageQueryUtil pageUtil);
 
     //  获取（分区）所有帖子
-    @Select("<script> select * from bbs.post " +
-            "<if test='categoryId!=null and categoryId!=\"\"'>" +
-            "where category_id = #{categoryId} " +
-            "</if>" +
-            "order by is_pinned desc " +
-            "limit #{start}, #{limit} " +
-            "</script>")
+    @Select({
+            "<script> select * from bbs.post",
+            "<if test='categoryId!=null and categoryId!=\"\"'>",
+            "where category_id = #{categoryId}",
+            "</if>",
+            "order by is_pinned desc",
+            "limit #{start}, #{limit}",
+            "</script>"
+    })
     List<Post> selectByCategoryIdAndPage(PageQueryUtil pageUtil);
 }

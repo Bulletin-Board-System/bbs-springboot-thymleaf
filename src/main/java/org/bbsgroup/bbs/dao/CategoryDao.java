@@ -10,4 +10,14 @@ import java.util.List;
 public interface CategoryDao {
     @Select("select * from bbs.category")
     List<Category> selectAll();
+
+    @Select({
+            "<script>",
+            "select * from bbs.category where category_id in",
+            "<foreach item='categoryId' collection='categoryIds' open='(' separator=',' close=')'>",
+            "#{categoryId}",
+            "</foreach>",
+            "</script>"
+    })
+    List<Category> selectAllByCategoryIds(List<Integer> categoryIds);
 }

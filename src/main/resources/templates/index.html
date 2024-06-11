@@ -7,20 +7,20 @@
 
 <div class="fly-panel fly-column">
     <div class="layui-container">
-        <!-- 1.渲染页面顶部的帖子分类信息 -->
-<!--        <ul class="layui-clear">-->
-<!--            <li th:class="${null ==categoryId} ?'layui-hide-xs layui-this':''"><a href="/">首页</a></li>-->
-<!--            <th:block th:unless="${null == bbsPostCategories}">-->
-<!--                <th:block th:each="c : ${bbsPostCategories}">-->
-<!--                    <li th:class="${null !=categoryId and categoryId==c.categoryId} ?'layui-hide-xs layui-this':''">-->
-<!--                        <a th:href="@{${'/index?categoryId='+c.categoryId}}"-->
-<!--                           th:text="${c.categoryName}">分享</a>-->
-<!--                    </li>-->
-<!--                </th:block>-->
-<!--            </th:block>-->
+        <!-- 渲染页面顶部的帖子分类信息 -->
+        <ul class="layui-clear">
+            <li th:class="${null ==categoryId} ?'layui-hide-xs layui-this':''"><a href="/app/index">全部</a></li>
+            <th:block th:unless="${null == categoryList}">
+                <th:block th:each="category : ${categoryList}">
+                    <li th:class="${null !=categoryId and categoryId==category.categoryId} ?'layui-hide-xs layui-this':''">
+                        <a th:href="@{${'/app/index?categoryId='+category.categoryId}}"
+                           th:text="${category.name}">全部</a>
+                    </li>
+                </th:block>
+            </th:block>
 
-<!--            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>-->
-<!--        </ul>-->
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+        </ul>
 
         <div class="fly-column-right layui-hide-xs">
             <span class="fly-search"><i class="layui-icon"></i></span>
@@ -44,20 +44,25 @@
                             <li>
                                 <h2>
                                     <a href="##" class="layui-badge"
+                                       th:text="${post.category}"
+                                    >分区</a>
+                                    <a href="##" class="layui-badge"
                                        th:if="${post.isPinned != undefined && post.isPinned == 1}"
                                     >置顶</a>
                                     <a href="##" class="layui-badge"
                                        th:if="${post.isFeatured != undefined && post.isFeatured == 1}"
                                        >精选</a>
-                                    文章详情页 todo
                                     <a th:href="@{${'/detail/'+post.postId}}"
                                        th:text="${post.title}">标题</a>
                                 </h2>
-<!--                                <div class="fly-list-info">-->
-<!--                                    <span th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>-->
-<!--&lt;!&ndash;                                    <span class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block&ndash;&gt;-->
-<!--&lt;!&ndash;                                            th:text="${post.postComments}"></th:block></span>&ndash;&gt;-->
-<!--                                </div>-->
+                                <div class="fly-list-info">
+                                    <a th:href="@{${'/userCenter/'+post.userId}}" link>
+                                        <cite th:text="${post.username}">Author</cite>
+                                    </a>
+                                    <span th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
+<!--                                    <span class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block-->
+<!--                                            th:text="${post.postComments}"></th:block></span>-->
+                                </div>
                                 <div class="fly-list-badge">
                                 </div>
                             </li>
