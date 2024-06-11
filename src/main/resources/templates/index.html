@@ -5,29 +5,29 @@
 <body>
 <div th:replace="header::header-fragment"></div>
 
-<!--<div class="fly-panel fly-column">-->
-<!--    <div class="layui-container">-->
-<!--        &lt;!&ndash; 1.渲染页面顶部的帖子分类信息 &ndash;&gt;-->
-<!--        <ul class="layui-clear">-->
-<!--            <li th:class="${null ==categoryId} ?'layui-hide-xs layui-this':''"><a href="/">首页</a></li>-->
-<!--            <th:block th:unless="${null == bbsPostCategories}">-->
-<!--                <th:block th:each="c : ${bbsPostCategories}">-->
-<!--                    <li th:class="${null !=categoryId and categoryId==c.categoryId} ?'layui-hide-xs layui-this':''">-->
-<!--                        <a th:href="@{${'/index?categoryId='+c.categoryId}}"-->
-<!--                           th:text="${c.categoryName}">分享</a>-->
-<!--                    </li>-->
-<!--                </th:block>-->
-<!--            </th:block>-->
+<div class="fly-panel fly-column">
+    <div class="layui-container">
+        <!-- 1.渲染页面顶部的帖子分类信息 -->
+        <ul class="layui-clear">
+            <li th:class="${null ==categoryId} ?'layui-hide-xs layui-this':''"><a href="/">首页</a></li>
+            <th:block th:unless="${null == bbsPostCategories}">
+                <th:block th:each="c : ${bbsPostCategories}">
+                    <li th:class="${null !=categoryId and categoryId==c.categoryId} ?'layui-hide-xs layui-this':''">
+                        <a th:href="@{${'/index?categoryId='+c.categoryId}}"
+                           th:text="${c.categoryName}">分享</a>
+                    </li>
+                </th:block>
+            </th:block>
 
-<!--            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>-->
-<!--        </ul>-->
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+        </ul>
 
-<!--        <div class="fly-column-right layui-hide-xs">-->
-<!--            <span class="fly-search"><i class="layui-icon"></i></span>-->
-<!--            <a th:href="@{/addPostPage}" class="layui-btn">发布新帖</a>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+        <div class="fly-column-right layui-hide-xs">
+            <span class="fly-search"><i class="layui-icon"></i></span>
+            <a th:href="@{/addPostPage}" class="layui-btn">发布新帖</a>
+        </div>
+    </div>
+</div>
 
 <!--<div class="layui-container">-->
 <!--    <div class="layui-row layui-col-space15">-->

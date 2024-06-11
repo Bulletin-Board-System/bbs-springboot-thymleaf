@@ -1,4 +1,4 @@
-package org.bbsgroup.bbs.controller;
+package org.bbsgroup.bbs.controller.api.user;
 
 import jakarta.servlet.http.HttpSession;
 import org.bbsgroup.bbs.common.Constants;
@@ -11,7 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/api/user")
