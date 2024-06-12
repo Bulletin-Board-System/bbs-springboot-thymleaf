@@ -42,6 +42,10 @@
                     <ul class="fly-list">
                         <th:block th:each="post : ${pageResult.list}">
                             <li>
+                                <a th:href="@{${'/userCenter/'+post.userId}}" class="fly-avatar">
+                                    <img th:src="@{${'/images/avatar/default.png'}}"
+                                         th:alt="${post.username}">
+                                </a>
                                 <h2>
                                     <a href="##" class="layui-badge"
                                        th:text="${post.category}"
@@ -52,7 +56,7 @@
                                     <a href="##" class="layui-badge"
                                        th:if="${post.isFeatured != undefined && post.isFeatured == 1}"
                                        >精选</a>
-                                    <a th:href="@{${'/detail/'+post.postId}}"
+                                    <a th:href="@{${'/app/detail/'+post.postId}}"
                                        th:text="${post.title}">标题</a>
                                 </h2>
                                 <div class="fly-list-info">
@@ -60,8 +64,10 @@
                                         <cite th:text="${post.username}">Author</cite>
                                     </a>
                                     <span th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
-<!--                                    <span class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block-->
-<!--                                            th:text="${post.postComments}"></th:block></span>-->
+                                    <span th:if="${post.commentCount != null}" class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block
+                                            th:text="${post.commentCount}"></th:block></span>
+                                    <span th:if="${post.commentCount == null}" class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block
+                                            th:text="${0}"></th:block></span>
                                 </div>
                                 <div class="fly-list-badge">
                                 </div>

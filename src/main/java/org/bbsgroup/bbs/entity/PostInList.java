@@ -1,9 +1,8 @@
 package org.bbsgroup.bbs.entity;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-public class PostPlus {
+public class PostInList {
     private static final long serialVersionUID = 1L;
 
     private Integer postId;
@@ -34,11 +33,6 @@ public class PostPlus {
     private String title;
 
     /**
-     * 内容
-     */
-    private String content;
-
-    /**
      * 发表时间
      */
     private Date createTime;
@@ -56,7 +50,7 @@ public class PostPlus {
     /**
      * 评论数量
      */
-    private Integer commentCnt;
+    private Integer commentCount;
 
     /**
      * 所在分区
@@ -111,14 +105,6 @@ public class PostPlus {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -143,12 +129,12 @@ public class PostPlus {
         this.username = username;
     }
 
-    public Integer getCommentCnt() {
-        return commentCnt;
+    public Integer getCommentCount() {
+        return commentCount;
     }
 
-    public void setCommentCnt(Integer commentCnt) {
-        this.commentCnt = commentCnt;
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 
     public String getCategory() {
@@ -161,18 +147,17 @@ public class PostPlus {
 
     @Override
     public String toString() {
-        return "PostPlus{" +
+        return "PostInList{" +
                 "postId=" + postId +
                 ", userId=" + userId +
                 ", categoryId=" + categoryId +
                 ", isPinned=" + isPinned +
                 ", isFeatured=" + isFeatured +
                 ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", username='" + username + '\'' +
-                ", commentCnt=" + commentCnt +
+                ", commentCount=" + commentCount +
                 ", category='" + category + '\'' +
                 '}';
     }

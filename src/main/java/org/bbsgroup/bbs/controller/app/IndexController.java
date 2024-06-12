@@ -8,6 +8,6 @@ public class IndexController {
     @GetMapping("/")
     public String index() {
         // 首页从 "/" 重定向到 "/app/index"
-        return "redirect:/app/login";
+        return "redirect:/app/index";
     }
 }

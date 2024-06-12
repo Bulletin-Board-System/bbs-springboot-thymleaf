@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface PostDao {
-    //  获取（分区）帖子总数
+    //  （根据 categoryId）获取帖子总数
     @Select({
             "<script>",
             "select count(*) from bbs.post",
@@ -20,7 +20,7 @@ public interface PostDao {
     })
     Integer getCountByCategoryId(PageQueryUtil pageUtil);
 
-    //  获取（分区）所有帖子
+    //  （根据 categoryId）分页获取帖子列表
     @Select({
             "<script> select * from bbs.post",
             "<if test='categoryId!=null and categoryId!=\"\"'>",
@@ -31,4 +31,9 @@ public interface PostDao {
             "</script>"
     })
     List<Post> selectByCategoryIdAndPage(PageQueryUtil pageUtil);
+
+    // 根据 postId 获取帖子
+    @Select("select * from bbs.post where post_id = #{postId}")
+    Post selectPostByPostId(Integer postId);
+
 }
