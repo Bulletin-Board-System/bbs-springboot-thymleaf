@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,11 +72,39 @@ public class UserController {
         try {
             User user = userDao.selectUserByUsernameAndPassword(username, password);
             if(ObjectUtils.isEmpty(user)){
-                return ResultGenerator.genBadRequestResult("学号或密码错误！");
+                return ResultGenerator.genBadRequestResult("用户名或密码错误！");
             }
             session.setAttribute(Constants.USER_SESSION_KEY, user);
             return ResultGenerator.genSuccessResult(null);
         } catch (Exception e) {
+            return ResultGenerator.genInternalServerError("服务器未知错误！");
+        }
+    }
+
+    @PostMapping("/updateUserInfo")
+    @ResponseBody
+    public Result updateInfo(@RequestParam("username") String username,
+                             @RequestParam("phone") String phone,
+                             @RequestParam("email") String email,
+                             @RequestParam("job") String job,
+                             @RequestParam("company") String company,
+                             HttpSession httpSession) {
+
+        if (!StringUtils.hasLength(username)) {
+            return ResultGenerator.genFailResult("用户名不能为空！");
+        }
+
+        User user = (User) httpSession.getAttribute(Constants.USER_SESSION_KEY);
+        user.setUsername(username);
+        user.setPhone(phone);
+        user.setEmail(email);
+        user.setJob(job);
+        user.setCompany(company);
+
+        try{
+            userDao.updateUserByUserId(user);
+            return ResultGenerator.genSuccessResult(null);
+        }catch (Exception e){
             return ResultGenerator.genInternalServerError("服务器未知错误！");
         }
     }

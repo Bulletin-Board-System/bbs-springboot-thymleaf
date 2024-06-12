@@ -18,12 +18,11 @@ public class PageConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .excludePathPatterns("/app/register")
                 .excludePathPatterns("/app/login")
-//                .addPathPatterns("/app/logout")
+                .addPathPatterns("/app/logout")
                 .addPathPatterns("/app/addPost")
                 .addPathPatterns("/app/editPost/**")
                 .addPathPatterns("/app/detail/**")
-//                .addPathPatterns("/app/updateUserInfo")
-                .addPathPatterns("/app/myCenter")
+                .addPathPatterns("/app/center")
                 .addPathPatterns("/app/userSet");
     }
 

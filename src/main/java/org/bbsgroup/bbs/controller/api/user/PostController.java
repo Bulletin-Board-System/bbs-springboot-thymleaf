@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -127,6 +124,28 @@ public class PostController {
             return ResultGenerator.genSuccessResult(null);
         } catch (Exception e) {
             return ResultGenerator.genInternalServerError("服务器未知错误！");
+        }
+    }
+
+    @PostMapping("/delPost/{postId}")
+    @ResponseBody
+    public Result delPost(@PathVariable("postId") Integer postId,
+                          HttpSession httpSession) {
+        if (null == postId || postId < 0) {
+            return ResultGenerator.genFailResult("文章 id 不能为空！");
+        }
+
+        User user = (User) httpSession.getAttribute(Constants.USER_SESSION_KEY);
+        Post post = postDao.selectPostByPostId(postId);
+        if(user.getUserId().equals(post.getPostId())){
+            return ResultGenerator.genUnAuthorizedResult("非本人发帖，无权限修改！");
+        }
+
+        try{
+            postDao.deletePostByPostId(postId);
+            return ResultGenerator.genSuccessResult(null);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("服务器未知错误！");
         }
     }
 }

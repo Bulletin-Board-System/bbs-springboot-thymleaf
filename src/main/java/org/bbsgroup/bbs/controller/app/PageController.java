@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.PublicKey;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -192,4 +193,35 @@ public class PageController {
         return "/post/edit";
     }
 
+    @GetMapping("/center")
+    public String center(HttpServletRequest request){
+        //  基本用户信息
+        User user = (User) request.getSession().getAttribute(Constants.USER_SESSION_KEY);
+
+        //  我发的贴
+        List<Post> postList = postDao.selectPostByUserId(user.getUserId());
+        int postCount = 0;
+        if(!CollectionUtils.isEmpty(postList)){
+            postCount = postList.size();
+        }
+
+        request.setAttribute("postList", postList);
+        request.setAttribute("postCount", postCount);
+        request.setAttribute("user", user);
+
+        return "/user/center";
+    }
+
+    @GetMapping("/userSet")
+    public String userSetPage(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute(Constants.USER_SESSION_KEY);
+        request.setAttribute("user", user);
+        return "/user/set";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession) {
+        httpSession.removeAttribute(Constants.USER_SESSION_KEY);
+        return "user/login";
+    }
 }

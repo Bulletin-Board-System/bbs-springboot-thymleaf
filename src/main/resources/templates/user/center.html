@@ -7,20 +7,14 @@
 
 <div class="layui-container fly-marginTop fly-user-main">
   <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
-    <li class="layui-nav-item">
-      <a th:href="@{${'/userCenter/'+bbsUser.userId}}">
-        <i class="layui-icon">&#xe609;</i>
-        我的主页
-      </a>
-    </li>
     <li class="layui-nav-item layui-this">
-      <a th:href="@{/myCenter}">
-        <i class="layui-icon">&#xe612;</i>
+      <a th:href="@{/app/center}">
+        <i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>
         用户中心
       </a>
     </li>
     <li class="layui-nav-item">
-      <a th:href="@{/userSet}">
+      <a th:href="@{/app/userSet}">
         <i class="layui-icon">&#xe620;</i>
         基本设置
       </a>
@@ -30,58 +24,33 @@
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span th:text="${myBBSPostCount}">11</span>）</li>
-        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span th:text="${myCollectBBSPostCount}">16</span>）</li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span th:text="${postCount}">11</span>）</li>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
 
-          <th:block th:if="${#lists.isEmpty(myBBSPostList)}">
+          <th:block th:if="${#lists.isEmpty(postList)}">
             <!-- 无数据时 -->
             <div class="fly-none">没有相关数据</div>
           </th:block>
 
-          <th:block th:unless="${#lists.isEmpty(myBBSPostList)}">
+          <th:block th:unless="${#lists.isEmpty(postList)}">
           <ul class="mine-view jie-row">
-            <th:block th:each="bbsPost : ${myBBSPostList}">
+            <th:block th:each="post : ${postList}">
             <li>
-              <a class="jie-title" th:href="@{${'/detail/'+bbsPost.postId}}" target="_blank" th:text="${bbsPost.postTitle}">My-BBS开源啦</a>
-              <i th:text="${#dates.format(bbsPost.createTime, 'yyyy/MM/dd HH:mm:ss')}">2021/08/01</i>
-              <a class="mine-edit" th:href="@{${'/editPostPage/'+bbsPost.postId}}">编辑</a>
-              <a class="mine-del" href="##" th:onclick="'delPost('+${bbsPost.postId}+')'">删除</a>
-              <em><th:block th:text="${bbsPost.postViews}"></th:block>阅/<th:block th:text="${bbsPost.postComments}"></th:block>答</em>
+              <a class="jie-title" th:href="@{${'/detail/'+post.postId}}" target="_blank" th:text="${post.title}">My-BBS开源啦</a>
+              <i th:text="${#dates.format(post.createTime, 'yyyy/MM/dd HH:mm:ss')}">2021/08/01</i>
+              <a class="mine-edit" th:href="@{${'/app/editPost/'+post.postId}}">编辑</a>
+              <a class="mine-del" href="##" th:onclick="'delPost('+${post.postId}+')'">删除</a>
             </li>
             </th:block>
           </ul>
           </th:block>
           <div id="LAY_page"></div>
         </div>
-        <div class="layui-tab-item">
-
-          <th:block th:if="${#lists.isEmpty(collectRecords)}">
-            <!-- 无数据时 -->
-            <div class="fly-none">没有相关数据</div>
-          </th:block>
-
-          <th:block th:unless="${#lists.isEmpty(collectRecords)}">
-            <ul class="mine-view jie-row">
-              <th:block th:each="bbsPost : ${collectRecords}">
-                <li>
-                  <a class="jie-title" th:href="@{${'/detail/'+bbsPost.postId}}" target="_blank" th:text="${bbsPost.postTitle}">My-BBS开源啦</a>
-                  <em><th:block th:text="${bbsPost.postCollects}"></th:block>收藏</em>
-                </li>
-              </th:block>
-            </ul>
-          </th:block>
-          <div id="LAY_page1"></div>
-        </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="fly-footer">
-  <p>My-BBS社区 2021 &copy; <a href="https://github.com/ZHENFENG13/My-BBS" target="_blank">十三</a></p>
 </div>
 
 <script th:src="@{/layui/layui.js}"></script>
@@ -124,9 +93,9 @@
             var $ = layui.$;
             $.ajax({
                 type: 'POST',//方法类型
-                url: '/delPost/'+postId,
+                url: '/api/user/delPost/'+postId,
                 success: function (result) {
-                    if (result.resultCode == 200) {
+                    if (result.resultCodeValue == 200) {
                         layer.confirm('删除成功!将刷新本页面...', {icon: 3, skin: 'layui-layer-molv',title:'提示'}, function(index){
                             layer.close(index);
                             window.location.reload();

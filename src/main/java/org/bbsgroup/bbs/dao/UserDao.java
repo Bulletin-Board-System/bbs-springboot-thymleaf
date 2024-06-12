@@ -36,9 +36,7 @@ public interface UserDao {
     })
     List<User> selectAllByUserIds(List<Integer> userIds);
 
-
-
     //    暂不支持更新 password
     @Update("update bbs.user set username = #{username}, email = #{email}, phone = #{phone}, job = #{job}, company = #{company} where user_id = #{userId}")
-    void updateUser(User user);
+    void updateUserByUserId(User user);
 }
