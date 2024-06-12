@@ -1,5 +1,7 @@
 package org.bbsgroup.bbs.dao;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.bbsgroup.bbs.entity.Comment;
@@ -17,9 +19,9 @@ public interface CommentDao {
 
     //  根据 postId 分页获取评论列表
     @Select({
-            "<script> select * from bbs.post",
-            "where category_id = #{categoryId}",
-            "order by is_pinned desc",
+            "<script> select * from bbs.comment",
+            "where post_id = #{postId}",
+            "order by create_time desc",
             "limit #{start}, #{limit}",
             "</script>"
     })
@@ -36,4 +38,16 @@ public interface CommentDao {
             "</script>"
     })
     List<PostInList> getCommentCountByPostIds(List<Integer> postIds);
+
+    //  新增评论
+    @Insert("insert into bbs.comment (user_id, post_id, parent_id, content, create_time) values (#{userId}, #{postId}, #{parentId}, #{content}, #{createTime})")
+    void insertComment(Comment comment);
+
+    //  根据 commentId 获取评论
+    @Select("select * from bbs.comment where comment_id = #{commentId}")
+    Comment getCommentByCommentId(Integer commentId);
+
+    //  根据 commentId 删除评论
+    @Delete("delete from bbs.comment where comment_id = #{commentId}")
+    void deleteCommentByCommentId(Integer commentId);
 }

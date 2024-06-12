@@ -3,6 +3,7 @@ package org.bbsgroup.bbs.entity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -39,7 +40,7 @@ public class Comment{
     /**
      * 评论时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     public Integer getCommentId() {
         return commentId;
@@ -81,11 +82,11 @@ public class Comment{
         this.content = content;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

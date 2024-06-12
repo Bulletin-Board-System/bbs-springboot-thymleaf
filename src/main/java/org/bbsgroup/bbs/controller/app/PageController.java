@@ -137,6 +137,7 @@ public class PageController {
 
         //  分页参数
         Map params = new HashMap();
+        params.put("postId", postId);
         params.put("page", page);
         //  默认分页大小为 6
         params.put("limit", 6);
@@ -148,7 +149,7 @@ public class PageController {
         List<CommentInList> commentList = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(commentOriginalList)) {
-            commentList = BeanUtil.copyList(commentList, CommentInList.class);
+            commentList = BeanUtil.copyList(commentOriginalList, CommentInList.class);
             //当前评论者的 userId
             List<Integer> userIds = commentList.stream().map(CommentInList::getUserId).collect(Collectors.toList());
             //分别查询user数据
@@ -158,7 +159,7 @@ public class PageController {
                 Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(User::getUserId, Function.identity(), (entity1, entity2) -> entity1));
                 for (CommentInList comment : commentList) {
                     if (userMap.containsKey(comment.getUserId())) {
-                        //设置头像字段和昵称字段
+                        //设置用户名字段
                         User user1 = userMap.get(comment.getUserId());
                         comment.setUsername(user1.getUsername());
                     }
@@ -194,14 +195,14 @@ public class PageController {
     }
 
     @GetMapping("/center")
-    public String center(HttpServletRequest request){
+    public String center(HttpServletRequest request) {
         //  基本用户信息
         User user = (User) request.getSession().getAttribute(Constants.USER_SESSION_KEY);
 
         //  我发的贴
         List<Post> postList = postDao.selectPostByUserId(user.getUserId());
         int postCount = 0;
-        if(!CollectionUtils.isEmpty(postList)){
+        if (!CollectionUtils.isEmpty(postList)) {
             postCount = postList.size();
         }
 
