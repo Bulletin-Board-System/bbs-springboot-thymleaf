@@ -10,6 +10,7 @@
         <!--<div class="fly-none">没有权限</div>-->
         <div class="layui-form layui-form-pane">
             <div class="layui-tab layui-tab-brief" lay-filter="user">
+                <input type="hidden" id="postId" th:value="${post.postId}">
                 <ul class="layui-tab-title">
                     <li class="layui-this">编辑帖子</li>
                 </ul>
@@ -17,24 +18,24 @@
                     <div class="layui-tab-item layui-show">
                         <form method="post" id="postForm" onsubmit="return false;" action="##">
                             <div class="layui-row layui-col-space15 layui-form-item">
-                                <input type="hidden" id="postId" th:value="${bbsPost.postId}">
                                 <div class="layui-col-md6">
                                     <label for="postTitle" class="layui-form-label">标题</label>
                                     <div class="layui-input-block">
                                         <input type="text" id="postTitle" name="postTitle" required
-                                               autocomplete="off" class="layui-input" th:value="${bbsPost.postTitle}">
+                                               autocomplete="off" class="layui-input" th:value="${post.title}">
                                     </div>
                                 </div>
                                 <div class="layui-col-md6">
-                                    <label class="layui-form-label">所在专栏</label>
+                                    <label class="layui-form-label">所在分区</label>
                                     <div class="layui-input-block">
                                         <select name="class" lay-filter="column"
                                                 id="postCategoryId">
                                             <option value="0"></option>
-                                            <th:block th:unless="${null == bbsPostCategories}">
-                                                <th:block th:each="c : ${bbsPostCategories}">
-                                                    <option th:value="${c.categoryId}" th:text="${c.categoryName}"
-                                                            th:selected="${null !=c.categoryId and bbsPost.postCategoryId==c.categoryId} ?true:false">提问
+                                            <th:block th:unless="${null == categoryList}">
+                                                <th:block th:each="c : ${categoryList}">
+                                                    <option th:value="${c.categoryId}" th:text="${c.name}"
+                                                            th:selected="${null != c.categoryId and post.categoryId == c.categoryId} ?true:false" >
+                                                        分区
                                                     </option>
                                                 </th:block>
                                             </th:block>
@@ -46,24 +47,13 @@
                                 <div class="layui-input-block">
                                     <div id="wangEditor" name="postContent" required
                                          placeholder="详细描述"
-                                         style="height: 260px;" th:utext="${bbsPost.postContent}"></div>
+                                         style="height: 260px;" th:utext="${post.content}"></div>
                                 </div>
                             </div>
                             <div class="layui-form-item" style="margin-top: 56px;">
-                                <label for="verifyCode" class="layui-form-label">验证码</label>
-                                <div class="layui-input-inline">
-                                    <input type="text" id="verifyCode" name="verifyCode" required
-                                           placeholder="验证码" autocomplete="off" class="layui-input">
-                                </div>
-                                <div class="layui-form-mid">
-                                    <span style="color: #c00;"><img data-tooltip="看不清楚？换一张"
-                                                                    th:src="@{/common/captcha}"
-                                                                    onclick="this.src='/common/captcha?d='+new Date()*1"
-                                                                    alt="单击图片刷新！"></span>
-                                </div>
                             </div>
                             <div class="layui-form-item">
-                                <button class="layui-btn" lay-filter="*" lay-submit onclick="editBBSPost()">立即发布</button>
+                                <button class="layui-btn" lay-filter="*" lay-submit onclick="editPost()">立即发布</button>
                             </div>
                         </form>
                     </div>
@@ -90,85 +80,70 @@
         //富文本编辑器 用于商品详情编辑
         const E = window.wangEditor;
         editorD = new E('#wangEditor')
+
         // 设置编辑区域高度为 260px
-        editorD.config.height = 260
+        editorD.config.height = 220
         editorD.config.zIndex = 1
-        //配置服务端图片上传地址
-        editorD.config.uploadImgServer = '/uploadFiles'
-        editorD.config.uploadFileName = 'files'
-        //限制图片大小 2M
-        editorD.config.uploadImgMaxSize = 2 * 1024 * 1024
-        //限制一次最多能传几张图片 一次最多上传 5 个图片
-        editorD.config.uploadImgMaxLength = 5
-        //隐藏插入网络图片的功能
-        editorD.config.showLinkImg = false
-        editorD.config.uploadImgHooks = {
-            // 图片上传并返回了结果，图片插入已成功
-            success: function (xhr) {
-                console.log('success', xhr)
-            },
-            // 图片上传并返回了结果，但图片插入时出错了
-            fail: function (xhr, editor, resData) {
-                console.log('fail', resData)
-            },
-            // 上传图片出错，一般为 http 请求的错误
-            error: function (xhr, editor, resData) {
-                console.log('error', xhr, resData)
-            },
-            // 上传图片超时
-            timeout: function (xhr) {
-                console.log('timeout')
-            },
-            customInsert: function (insertImgFn, result) {
-                if (result != null && result.resultCode == 200) {
-                    // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
-                    result.data.forEach(img => {
-                        insertImgFn(img)
-                    });
-                } else {
-                    alert("error");
-                }
-            }
-        }
+
+        // 自定义菜单
+        editorD.config.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',
+            'fontName',
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'indent',
+            'lineHeight',
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景色
+            'link',
+            'list',
+            'justify',
+            'emoticon',
+            'table',
+            'code',
+            'splitLine',
+            'quote',  // 引用
+            'undo',  // 撤销
+            'redo',  // 重做
+        ];
+
         editorD.create();
 
-        window.editBBSPost = function () {
+        window.editPost = function () {
             var postId = $("#postId").val();
             var postTitle = $("#postTitle").val();
             if (isNull(postTitle)) {
                 layer.alert('请输入标题!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
                 return;
             }
-            var verifyCode = $("#verifyCode").val();
-            if (!validLength(verifyCode, 5)) {
-                layer.alert('请输入正确的验证码!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
-                return;
-            }
             var postCategoryId = $('#postCategoryId option:selected').val();
             if (isNull(postCategoryId)) {
-                layer.alert('请选择分类!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
+                layer.alert('请选择分区!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
                 return;
             }
-
             var postContent = editorD.txt.html();
 
             if (!validLength(postContent, 100000)) {
                 layer.alert('内容超出长度!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
                 return;
             }
-            var url = '/editPost';
+            var url = '/api/user/editPost';
             var data = {
                 "postId" : postId,
-                "postTitle": postTitle, "verifyCode": verifyCode,
-                "postCategoryId": postCategoryId, "postContent": postContent
+                "title": postTitle,
+                "categoryId": postCategoryId,
+                "content": postContent
             };
             $.ajax({
                 type: 'POST',//方法类型
                 url: url,
                 data: data,
                 success: function (result) {
-                    if (result.resultCode == 200) {
-                        window.location.href = '/detail/'+postId;
+                    if (result.resultCodeValue == 200) {
+                        window.location.href = '/app/detail/'+postId;
                     } else {
                         layer.msg(result.message);
                     }

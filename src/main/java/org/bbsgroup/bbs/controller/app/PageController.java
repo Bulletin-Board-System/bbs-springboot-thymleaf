@@ -1,7 +1,8 @@
 package org.bbsgroup.bbs.controller.app;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.ibatis.jdbc.Null;
+import jakarta.servlet.http.HttpSession;
+import org.bbsgroup.bbs.common.Constants;
 import org.bbsgroup.bbs.dao.CategoryDao;
 import org.bbsgroup.bbs.dao.CommentDao;
 import org.bbsgroup.bbs.dao.PostDao;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -170,11 +170,26 @@ public class PageController {
         return "/post/detail";
     }
 
-    @GetMapping("/appPostPage")
-    public String addPost(HttpServletRequest request){
+    @GetMapping("/addPost")
+    public String addPost(HttpServletRequest request) {
         List<Category> categoryList = categoryDao.selectAll();
         request.setAttribute("categoryList", categoryList);
         return "/post/add";
+    }
+
+    @GetMapping("/editPost/{postId}")
+    public String editPost(HttpServletRequest request, HttpSession session, @PathVariable("postId") Integer postId) {
+        User user = (User) request.getSession().getAttribute(Constants.USER_SESSION_KEY);
+
+        //  获取分类
+        List<Category> categoryList = categoryDao.selectAll();
+        request.setAttribute("categoryList", categoryList);
+
+        //  获取文章
+        Post post = postDao.selectPostByPostId(postId);
+
+        request.setAttribute("post", post);
+        return "/post/edit";
     }
 
 }

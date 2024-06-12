@@ -23,7 +23,7 @@
         </ul>
 
         <div class="fly-column-right layui-hide-xs">
-            <a th:href="@{/app/addPostPage}" class="layui-btn">发布新帖</a>
+            <a th:href="@{/app/addPost}" class="layui-btn">发布新帖</a>
         </div>
     </div>
 </div>
@@ -34,9 +34,9 @@
             <div class="fly-panel detail-box">
                 <h1 th:text="${post.title}">标题</h1>
                 <div class="fly-detail-info">
-                    <div>
+                    <div th:if="${post.userId == session.userMe.userId}">
                         <a class="layui-btn layui-btn-xs jie-admin"
-                           th:href="@{'/editPostPage/'+${post.postId}}">编辑</a>
+                           th:href="@{'/app/editPost/'+${post.postId}}">编辑</a>
                     </div>
                     <span class="fly-list-nums">
           </span>

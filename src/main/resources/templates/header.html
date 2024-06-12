@@ -19,13 +19,13 @@
 
         <ul class="layui-nav fly-nav-user">
 
-            <!-- 未登入的状态 -->
-            <th:block th:if="${session.myBBSUser==null}">
+            <!-- 未登录的状态 -->
+            <th:block th:if="${session.userMe==null}">
                 <li class="layui-nav-item">
                     <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
                 </li>
                 <li class="layui-nav-item">
-                    <a th:href="@{/app/login}">登入</a>
+                    <a th:href="@{/app/login}">登录</a>
                 </li>
                 <li class="layui-nav-item">
                     <a th:href="@{/app/register}">注册</a>
@@ -33,19 +33,20 @@
             </th:block>
 
 
-            <!-- 登入后的状态 -->
-            <th:block th:unless="${session.user==null}">
+            <!-- 登录后的状态 -->
+            <th:block th:unless="${session.userMe==null}">
                 <li class="layui-nav-item">
                     <a class="fly-nav-avatar" href="javascript:;">
-                        <cite class="layui-hide-xs" th:text="${session.user.username}">游客</cite>
+                        <cite class="layui-hide-xs" th:text="${session.userMe.username}">游客</cite>
+                        <img th:src="@{${'/images/avatar/default.png'}}">
                         <span class="layui-nav-more"></span>
                     </a>
                     <dl class="layui-nav-child">
-<!--                        <dd><a th:href="@{/userSet}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>-->
-<!--                        <dd><a th:href="@{/myCenter}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>-->
+                        <dd><a th:href="@{/userSet}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                        <dd><a th:href="@{/myCenter}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a>
                         </dd>
                         <hr style="margin: 5px 0;">
-<!--                        <dd><a th:href="@{/logout}" style="text-align: center;">退出</a></dd>-->
+                        <dd><a th:href="@{/logout}" style="text-align: center;">退出</a></dd>
                     </dl>
                 </li>
             </th:block>

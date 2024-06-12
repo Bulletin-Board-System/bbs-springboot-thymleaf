@@ -32,12 +32,12 @@ public class Post {
     /**
      * 0表示不置顶，1表示置顶
      */
-    private Byte isPinned;
+    private Byte isPinned = 0;
 
     /**
      * 0表示非精选，1表示精选
      */
-    private Byte isFeatured;
+    private Byte isFeatured = 0;
 
     /**
      * 标题
