@@ -12,12 +12,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/admin")
 @Transactional
 public class PostAdminController {
     private final PostDao postDao;
+
     public PostAdminController(PostDao postDao, HttpSession httpSession) {
         this.postDao = postDao;
     }
@@ -75,21 +77,50 @@ public class PostAdminController {
         }
     }
 
+    // 删除文章
     @PostMapping("/delPost/{postId}")
     @ResponseBody
-    public Result delPost(@PathVariable("postId") Integer postId,
-                          HttpSession httpSession) {
+    public Result delPost(@PathVariable("postId") Integer postId) {
         if (null == postId || postId < 0) {
             return ResultGenerator.genFailResult("文章 id 不能为空！");
         }
 
-
-        try{
+        try {
             postDao.deletePostByPostId(postId);
             return ResultGenerator.genSuccessResult(null);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResultGenerator.genFailResult("服务器未知错误！");
         }
     }
+
+    // 查询所有文章
+    @PostMapping("/detail")
+    @ResponseBody
+    public Result selectPost(){
+
+        try {
+            List<Post> postList = postDao.selectPost();
+            return ResultGenerator.genSuccessResult(postList);
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult("服务器未知错误！");
+        }
+    }
+
+    // 根据id查询文章详情
+    @PostMapping("/detail/{postId}")
+    @ResponseBody
+    public Result selectPostByPostId(@PathVariable("postId") Integer postId){
+        if (null == postId || postId < 0) {
+            return ResultGenerator.genFailResult("文章 id 不能为空！");
+        }
+
+        try {
+            Post post = postDao.selectPostByPostId(postId);
+            return ResultGenerator.genSuccessResult(post);
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult("服务器未知错误！");
+        }
+    }
+
 }
 

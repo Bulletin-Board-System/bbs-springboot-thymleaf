@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/admin")
@@ -82,4 +79,12 @@ public class AdminController {
             return ResultGenerator.genInternalServerError("服务器未知错误！");
         }
     }
+    // 管理员登出
+    @GetMapping("/logout")
+    @ResponseBody
+    public Result logout(HttpSession httpSession) {
+        httpSession.removeAttribute(Constants.ADMIN_SESSION_KEY);
+        return ResultGenerator.genSuccessResult(null);
+    }
+
 }
