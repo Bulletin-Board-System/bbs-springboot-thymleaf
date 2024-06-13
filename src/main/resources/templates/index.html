@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header::head-fragment('首页')">
+</head>
+<body>
+<div th:replace="header::header-fragment"></div>
+
+<div class="fly-panel fly-column">
+    <div class="layui-container">
+        <!-- 渲染页面顶部的帖子分类信息 -->
+        <ul class="layui-clear">
+            <li th:class="${null ==categoryId} ?'layui-hide-xs layui-this':''"><a href="/app/index">全部</a></li>
+            <th:block th:unless="${null == categoryList}">
+                <th:block th:each="category : ${categoryList}">
+                    <li th:class="${null !=categoryId and categoryId==category.categoryId} ?'layui-hide-xs layui-this':''">
+                        <a th:href="@{${'/app/index?categoryId='+category.categoryId}}"
+                           th:text="${category.name}">全部</a>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+        </ul>
+
+        <div class="fly-column-right layui-hide-xs">
+            <a th:href="@{/app/addPost}" class="layui-btn">发布新帖</a>
+        </div>
+    </div>
+</div>
+
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="fly-panel" style="margin-bottom: 0;">
+                <!-- 渲染帖子分页列表数据 -->
+                <th:block th:if="${#lists.isEmpty(pageResult.list)}">
+                    <!-- 无数据时 -->
+                    <div class="fly-none">没有相关数据</div>
+                </th:block>
+                <th:block th:unless="${#lists.isEmpty(pageResult.list)}">
+                    <ul class="fly-list">
+                        <th:block th:each="post : ${pageResult.list}">
+                            <li>
+                                <a th:href="@{${'/userCenter/'+post.userId}}" class="fly-avatar">
+                                    <img th:src="@{${'/images/avatar/default.png'}}"
+                                         th:alt="${post.username}">
+                                </a>
+                                <h2>
+                                    <a href="##" class="layui-badge"
+                                       th:text="${post.category}"
+                                    >分区</a>
+                                    <a href="##" class="layui-badge"
+                                       th:if="${post.isPinned != undefined && post.isPinned == 1}"
+                                    >置顶</a>
+                                    <a href="##" class="layui-badge"
+                                       th:if="${post.isFeatured != undefined && post.isFeatured == 1}"
+                                       >精选</a>
+                                    <a th:href="@{${'/app/detail/'+post.postId}}"
+                                       th:text="${post.title}">标题</a>
+                                </h2>
+                                <div class="fly-list-info">
+                                    <a th:href="@{${'/userCenter/'+post.userId}}" link>
+                                        <cite th:text="${post.username}">Author</cite>
+                                    </a>
+                                    <span th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
+                                    <span th:if="${post.commentCount != null}" class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block
+                                            th:text="${post.commentCount}"></th:block></span>
+                                    <span th:if="${post.commentCount == null}" class="fly-list-nums"><i class="iconfont icon-pinglun1" title="评论"></i> <th:block
+                                            th:text="${0}"></th:block></span>
+                                </div>
+                                <div class="fly-list-badge">
+                                </div>
+                            </li>
+                        </th:block>
+                    </ul>
+                    <!-- 生成分页按钮 -->
+                    <div style="text-align: center">
+                        <div class="laypage-main">
+                            <th:block th:if="${pageResult.currPage>1}">
+                                <a class="laypage-prev"
+                                   th:href="@{/app/index(period=${keyword},page=${pageResult.currPage-1},keyword=${keyword},categoryId=${categoryId},orderBy=${orderBy})}">
+                                    &lt;&lt;</a>
+                            </th:block>
+                            <th:block th:if="${pageResult.currPage==1}">
+                                <a class="laypage-prev"
+                                   href="##">
+                                    &lt;&lt;</a>
+                            </th:block>
+                            <th:block th:if="${pageResult.currPage-2 >=1}">
+                                <a class="laypage-prev"
+                                   th:href="@{/app/index(page=${pageResult.currPage-2},categoryId=${categoryId})}"
+                                   th:text="${pageResult.currPage - 2}">1</a>
+                            </th:block>
+                            <th:block th:if="${pageResult.currPage-1 >=1}">
+                                <a class="laypage-prev"
+                                   th:href="@{/app/index(page=${pageResult.currPage-1},categoryId=${categoryId})}"
+                                   th:text="${pageResult.currPage - 1}">1</a>
+                            </th:block>
+                            <a href="##" class="laypage-curr" th:text="${pageResult.currPage}">1</a>
+                            <th:block th:if="${pageResult.currPage+1<=pageResult.totalPage}">
+                                <a class="laypage-next"
+                                   th:href="@{/app/index(page=${pageResult.currPage+1},categoryId=${categoryId})}"
+                                   th:text="${pageResult.currPage + 1}">1</a>
+                            </th:block>
+                            <th:block th:if="${pageResult.currPage+2<=pageResult.totalPage}">
+                                <a class="laypage-next"
+                                   th:href="@{/app/index(page=${pageResult.currPage+2},categoryId=${categoryId})}"
+                                   th:text="${pageResult.currPage + 2}">1</a>
+                            </th:block>
+                            <th:block th:if="${pageResult.currPage<pageResult.totalPage}">
+                                <a class="laypage-next"
+                                   th:href="@{/app/index(page=${pageResult.currPage+1},categoryId=${categoryId})}">
+                                    &gt;&gt;</a>
+                            </th:block>
+                            <th:block th:if="${pageResult.currPage==pageResult.totalPage}">
+                                <a class="laypage-next"
+                                   href="##">
+                                    &gt;&gt;</a>
+                            </th:block>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript">
+    layui.use(['layer', 'element', 'jquery'], function () {
+        var layer = layui.layer, $ = layui.$, element = layui.element;
+        var device = layui.device();
+        //阻止IE7以下访问
+        if (device.ie && device.ie < 8) {
+            layer.alert('如果您非得使用 IE 浏览器访问社区，那么请使用 IE8+');
+        }
+    });
+</script>
+</body>
+</html>

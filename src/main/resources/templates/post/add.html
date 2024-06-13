@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header::head-fragment('发布帖子')">
+</head>
+<body>
+<div th:replace="header::header-fragment"></div>
+
+<div class="layui-container fly-marginTop">
+    <div class="fly-panel" pad20 style="padding-top: 5px;">
+        <div class="layui-form layui-form-pane">
+            <div class="layui-tab layui-tab-brief" lay-filter="user">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">发表新帖<!-- 编辑帖子 --></li>
+                </ul>
+                <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                    <div class="layui-tab-item layui-show">
+                        <form method="post" id="postForm" onsubmit="return false;" action="##">
+                            <div class="layui-row layui-col-space15 layui-form-item">
+                                <div class="layui-col-md6">
+                                    <label for="postTitle" class="layui-form-label">标题</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="postTitle" name="postTitle" required
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <label class="layui-form-label">所在分区</label>
+                                    <div class="layui-input-block">
+                                        <select name="class" lay-filter="column"
+                                                id="postCategoryId">
+                                            <option value="0"></option>
+                                            <th:block th:unless="${null == categoryList}">
+                                                <th:block th:each="c : ${categoryList}">
+                                                    <option th:value="${c.categoryId}" th:text="${c.name}">
+                                                        分类
+                                                    </option>
+                                                </th:block>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <div class="layui-input-block">
+                                    <div id="wangEditor" name="postContent" required
+                                         placeholder="详细描述"
+                                         style="height: 260px;"></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="margin-top: 56px;">
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="*" lay-submit onclick="addPost()">立即发布</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/public.js}"></script>
+<script th:src="@{/layui/layui.js}"></script>
+
+<script type="text/javascript" src="//unpkg.com/wangeditor/dist/wangEditor.min.js"></script>
+
+<script type="text/javascript">
+    layui.use(['layer', 'element', 'jquery', 'form'], function () {
+        var layer = layui.layer, $ = layui.$, element = layui.element, form = layui.form;
+        var editorD;
+
+        //富文本编辑器 用于商品详情编辑
+        const E = window.wangEditor;
+        editorD = new E('#wangEditor')
+
+        // 设置编辑区域高度为 260px
+        editorD.config.height = 220
+        editorD.config.zIndex = 1
+
+        // 自定义菜单
+        editorD.config.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',
+            'fontName',
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'indent',
+            'lineHeight',
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景色
+            'link',
+            'list',
+            'justify',
+            'emoticon',
+            'table',
+            'code',
+            'splitLine',
+            'quote',  // 引用
+            'undo',  // 撤销
+            'redo',  // 重做
+        ];
+
+        editorD.create();
+
+        window.addPost = function () {
+            var postTitle = $("#postTitle").val();
+            if (isNull(postTitle)) {
+                layer.alert('请输入标题!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
+                return;
+            }
+            var postCategoryId = $('#postCategoryId option:selected').val();
+            if (isNull(postCategoryId)) {
+                layer.alert('请选择分区!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
+                return;
+            }
+
+            var postContent = editorD.txt.html();
+
+            if (!validLength(postContent, 100000)) {
+                layer.alert('内容超出长度!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
+                return;
+            }
+            var url = '/api/user/addPost';
+            var data = {
+                "title": postTitle,
+                "categoryId": postCategoryId,
+                "content": postContent
+            };
+            $.ajax({
+                type: 'POST',//方法类型
+                url: url,
+                data: data,
+                success: function (result) {
+                    if (result.resultCodeValue == 200) {
+                        window.location.href = '/app/index';
+                    } else {
+                        layer.msg(result.message);
+                    }
+                    ;
+                },
+                error: function () {
+                    layer.alert('操作失败!', {title: '提醒', skin: 'layui-layer-molv', icon: 2});
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
