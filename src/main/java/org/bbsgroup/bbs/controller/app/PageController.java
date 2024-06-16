@@ -169,14 +169,14 @@ public class PageController {
 
         PageResult commentPage = new PageResult(commentList, total, pageUtil.getLimit(), pageUtil.getPage());
         request.setAttribute("commentPage", commentPage);
-        return "/post/detail";
+        return "post/detail";
     }
 
     @GetMapping("/addPost")
     public String addPost(HttpServletRequest request) {
         List<Category> categoryList = categoryDao.selectAll();
         request.setAttribute("categoryList", categoryList);
-        return "/post/add";
+        return "post/add";
     }
 
     @GetMapping("/editPost/{postId}")
@@ -191,7 +191,7 @@ public class PageController {
         Post post = postDao.selectPostByPostId(postId);
 
         request.setAttribute("post", post);
-        return "/post/edit";
+        return "post/edit";
     }
 
     @GetMapping("/center")
@@ -210,14 +210,14 @@ public class PageController {
         request.setAttribute("postCount", postCount);
         request.setAttribute("user", user);
 
-        return "/user/center";
+        return "user/center";
     }
 
     @GetMapping("/userSet")
     public String userSetPage(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(Constants.USER_SESSION_KEY);
         request.setAttribute("user", user);
-        return "/user/set";
+        return "user/set";
     }
 
     @GetMapping("/logout")

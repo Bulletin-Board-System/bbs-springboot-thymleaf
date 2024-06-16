@@ -5,9 +5,9 @@ spring:
     name: bbs
   datasource:
     driver-class-name=com: mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bbs?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/bbs?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true&useSSL=false&allowMultiQueries=true
     username: root
-    password: SZQdyn342505
+    password: admin123
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
