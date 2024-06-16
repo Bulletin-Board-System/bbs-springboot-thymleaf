@@ -41,7 +41,7 @@
                     <ul class="fly-list">
                         <th:block th:each="post : ${pageResult.list}">
                             <li>
-                                <a th:href="@{${'/userCenter/'+post.userId}}" class="fly-avatar">
+                                <a href="##" class="fly-avatar">
                                     <img th:src="@{${'/images/avatar/default.png'}}"
                                          th:alt="${post.username}">
                                 </a>
@@ -59,7 +59,7 @@
                                        th:text="${post.title}">标题</a>
                                 </h2>
                                 <div class="fly-list-info">
-                                    <a th:href="@{${'/userCenter/'+post.userId}}" link>
+                                    <a href="##" link>
                                         <cite th:text="${post.username}">Author</cite>
                                     </a>
                                     <span th:text="${#dates.format(post.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>

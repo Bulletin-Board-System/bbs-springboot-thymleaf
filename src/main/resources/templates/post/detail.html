@@ -43,11 +43,11 @@
                 </div>
                 <div class="detail-about">
 
-                    <a class="fly-avatar" th:href="@{${'/userCenter/'+user.userId}}">
+                    <a class="fly-avatar" href="##">
                         <img th:src="@{${'/images/avatar/default.png'}}">
                     </a>
                     <div class="fly-detail-user">
-                        <a th:href="@{${'/userCenter/'+user.userId}}" class="fly-link">
+                        <a href="##" class="fly-link">
                             <cite th:text="${user.username}">Author</cite>
                         </a>
                     </div>
@@ -77,12 +77,12 @@
                                 <a name="item-1111111111"></a>
                                 <div class="detail-about detail-about-reply">
                                     <a class="fly-avatar"
-                                       th:href="@{${'/userCenter/'+comment.userId}}">
+                                       href="##">
                                         <img th:src="@{${'/images/avatar/default.png'}}"
                                              th:alt="${comment.username}">
                                     </a>
                                     <div class="fly-detail-user">
-                                        <a th:href="@{${'/userCenter/'+comment.userId}}"
+                                        <a href="##"
                                            class="fly-link">
                                             <cite th:text="${comment.username}">Author</cite>
                                         </a>
